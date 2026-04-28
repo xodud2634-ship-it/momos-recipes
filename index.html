@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>MOMOS Recipe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bk:#111;--wh:#fff;--off:#F7F6F3;--off2:#EFECEA;
+  --st:#88847F;--stl:#C5C1BB;--stx:#E6E3DC;
+  --ln:rgba(0,0,0,.09);--lnm:rgba(0,0,0,.16);
+  --bl:#0B76BE;--bld:#075F99;--blbg:rgba(11,118,190,.08);
+  --red:#C8392B;--grn:#2E7D52;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'Noto Serif KR',serif;background:var(--wh);color:var(--bk);-webkit-font-smoothing:antialiased;overscroll-behavior:none;}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+input,textarea,select{font-family:'Noto Serif KR',serif;-webkit-appearance:none;border-radius:0;}
+
+/* ── LOGIN ── */
+#LS{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#075F99 0%,#0B76BE 60%,#1a8fd1 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .4s;}
+#LS.out{opacity:0;pointer-events:none;}
+.ll-logo{width:clamp(160px,38vw,220px);margin-bottom:6px;}
+.ll-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:44px;text-align:center;}
+.lf{width:100%;max-width:300px;display:flex;flex-direction:column;gap:10px;}
+.lf input{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:var(--wh);font-family:'Space Mono',monospace;font-size:14px;letter-spacing:3px;padding:15px 16px;outline:none;width:100%;transition:border-color .2s;}
+.lf input:focus{border-color:rgba(255,255,255,.9);}
+.lf input::placeholder{color:rgba(255,255,255,.45);}
+.lf-btn{background:var(--wh);border:none;color:var(--bl);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:16px;width:100%;transition:background .18s;}
+.lf-btn:active,.lf-btn:hover{background:rgba(255,255,255,.88);}
+.lerr{font-family:'Space Mono',monospace;font-size:10px;color:#ffe0dd;text-align:center;height:16px;letter-spacing:1px;}
+
+/* ── NOTICE ── */
+.ntc{background:var(--bl);color:var(--wh);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-align:center;padding:9px 40px;position:relative;}
+.ntcx{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.55);font-size:14px;padding:4px;}
+
+/* ── HEADER ── */
+header{border-bottom:1px solid var(--lnm);background:var(--wh);position:sticky;top:0;z-index:100;}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:62px;gap:10px;}
+@media(min-width:768px){.hdr{padding:0 48px;height:76px;}}
+.hdr-logo{height:34px;width:auto;}
+@media(min-width:768px){.hdr-logo{height:44px;}}
+.hsr{display:flex;align-items:center;gap:9px;border:1px solid var(--stx);padding:9px 13px;flex:1;max-width:280px;transition:border-color .2s;}
+.hsr:focus-within{border-color:var(--bl);}
+.hsr svg{color:var(--stl);flex-shrink:0;}
+.hsr input{border:none;background:transparent;font-size:13px;color:var(--bk);width:100%;outline:none;min-width:0;}
+.hsr input::placeholder{color:var(--stl);}
+@media(max-width:500px){.hsr{display:none;}}
+.hdr-btns{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.hbtn{background:none;border:1px solid var(--stx);color:var(--st);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;padding:7px 10px;transition:all .15s;white-space:nowrap;}
+.hbtn:hover{border-color:var(--bl);color:var(--bl);}
+.hbtn.pri{background:var(--bl);border-color:var(--bl);color:var(--wh);}
+.hbtn.pri:hover{background:var(--bld);}
+@media(max-width:600px){.hbtn .txt{display:none;}}
+
+/* ── MOBILE SEARCH ── */
+.ms{display:none;padding:10px 16px;border-bottom:1px solid var(--ln);background:var(--off);}
+.msi{display:flex;align-items:center;gap:9px;border:1px solid var(--stx);background:var(--wh);padding:10px 13px;}
+.msi:focus-within{border-color:var(--bl);}
+.msi input{border:none;background:transparent;font-size:14px;color:var(--bk);width:100%;outline:none;}
+.msi input::placeholder{color:var(--stl);}
+@media(max-width:500px){.ms{display:block;}}
+
+/* ── CAT TABS ── */
+.ctabs{display:flex;border-bottom:1px solid var(--ln);overflow-x:auto;background:var(--wh);-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.ctabs::-webkit-scrollbar{display:none;}
+.ctab{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--st);background:none;border:none;padding:13px 16px;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;flex-shrink:0;}
+.ctab.on{color:var(--bl);border-bottom-color:var(--bl);}
+.ctab-add{padding:10px 16px;background:none;border:none;color:var(--stl);font-size:18px;flex-shrink:0;transition:color .15s;}
+.ctab-add:hover{color:var(--bl);}
+
+/* ── BODY ── */
+.app-body{display:flex;}
+.sidebar{display:none;}
+@media(min-width:900px){
+  .sidebar{display:block;width:186px;flex-shrink:0;border-right:1px solid var(--ln);padding:28px 0;position:sticky;top:77px;height:calc(100vh - 77px);overflow-y:auto;}
+  .sidebar::-webkit-scrollbar{width:3px;}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--stx);}
+}
+.slbl{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--stl);padding:0 20px;margin-bottom:6px;display:block;}
+.sbtn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:10px 20px;background:none;border:none;border-left:2px solid transparent;font-size:13px;color:var(--bk);text-align:left;transition:all .13s;}
+.sbtn:hover{background:var(--off);color:var(--bl);}
+.sbtn.on{color:var(--bl);background:var(--blbg);border-left-color:var(--bl);font-weight:600;}
+.scnt{font-family:'Space Mono',monospace;font-size:9px;color:var(--stl);}
+.sbtn.on .scnt{color:var(--bl);opacity:.6;}
+
+/* ── MAIN ── */
+.main{flex:1;padding:20px 16px 60px;min-width:0;}
+@media(min-width:768px){.main{padding:32px 40px 60px;}}
+.mhd{margin-bottom:20px;}
+.mt{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--bk);margin-bottom:3px;letter-spacing:1px;}
+@media(min-width:768px){.mt{font-size:24px;}}
+.mm{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--st);text-transform:uppercase;}
+.mm b{color:var(--bl);font-weight:400;}
+
+/* ── RECIPE GRID ── */
+.rg{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--lnm);border-left:1px solid var(--lnm);}
+@media(min-width:540px){.rg{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.rg{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));}}
+
+.rc{border-right:1px solid var(--lnm);border-bottom:1px solid var(--lnm);background:var(--wh);cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;transition:background .13s;display:flex;flex-direction:column;}
+.rc:active{background:var(--off);}
+@media(min-width:768px){
+  .rc:hover{background:var(--off);}
+  .rc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;background:var(--bl);transform:scaleX(0);transform-origin:left;transition:transform .22s ease;}
+  .rc:hover::after{transform:scaleX(1);}
+}
+.rc-photo{width:100%;aspect-ratio:4/3;background:var(--off2);overflow:hidden;position:relative;flex-shrink:0;}
+.rc-photo img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.rc:hover .rc-photo img{transform:scale(1.04);}
+.rc-ph-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--stl);font-size:24px;}
+.rc-photo-btn{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);border:none;color:var(--wh);font-size:9px;padding:4px 8px;font-family:'Space Mono',monospace;letter-spacing:1px;opacity:0;transition:opacity .15s;}
+.rc:hover .rc-photo-btn{opacity:1;}
+.rc-info{padding:13px 13px 11px;flex:1;display:flex;flex-direction:column;}
+@media(min-width:768px){.rc-info{padding:16px;}}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.rc-cat{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--stl);}
+.rc-fav{background:none;border:none;font-size:15px;color:var(--stl);padding:0;line-height:1;transition:color .15s;}
+.rc-fav.on{color:#E8A020;}
+.rc-name{font-size:14px;font-weight:500;color:var(--bk);line-height:1.3;margin-bottom:8px;}
+@media(min-width:768px){.rc-name{font-size:16px;}}
+.rc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;}
+.rt{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--st);background:var(--off2);padding:2px 6px;}
+.rt.b{color:var(--bl);background:var(--blbg);}
+.rt.y{color:#B07A10;background:rgba(224,168,32,.1);}
+.empty-s{grid-column:1/-1;text-align:center;padding:60px 20px;}
+.ei{font-size:28px;opacity:.2;margin-bottom:10px;}
+.et{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--st);}
+
+/* ── PANEL ── */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;}
+.ov.open{display:block;}
+.panel{position:fixed;z-index:201;background:var(--wh);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  bottom:0;left:0;right:0;max-height:94dvh;border-radius:14px 14px 0 0;
+  transform:translateY(100%);transition:transform .28s ease-out;}
+.panel.open{transform:translateY(0);}
+@media(min-width:768px){
+  .panel{top:0;bottom:0;right:0;left:auto;width:min(700px,90vw);max-height:none;border-radius:0;border-left:1px solid var(--lnm);
+  transform:translateX(100%);transition:transform .25s ease-out;}
+  .panel.open{transform:translateX(0);}
+}
+.panel::-webkit-scrollbar{width:3px;}
+.panel::-webkit-scrollbar-thumb{background:var(--stx);}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes pi{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.dh{display:flex;justify-content:center;padding:10px;}
+.dhb{width:36px;height:4px;background:var(--stx);border-radius:2px;}
+@media(min-width:768px){.dh{display:none;}}
+
+.phd{background:var(--bk);padding:18px 22px 16px;position:sticky;top:0;z-index:5;}
+@media(min-width:768px){.phd{padding:22px 32px 18px;}}
+.phd-acts{float:right;display:flex;gap:6px;margin-top:-4px;}
+.pact{background:none;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.55);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;transition:all .15s;}
+.pact:hover{border-color:var(--bl);color:var(--bl);}
+.pact.red:hover{border-color:var(--red);color:var(--red);}
+.pcl{float:right;background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;font-family:'Space Mono',monospace;margin-top:-2px;padding:4px;transition:color .15s;margin-left:8px;}
+.pcl:hover{color:var(--bl);}
+.pct{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bl);margin-bottom:5px;margin-top:8px;}
+.pnm-inp{background:none;border:none;border-bottom:1px solid rgba(255,255,255,.15);color:var(--wh);font-size:20px;font-weight:600;font-family:'Noto Serif KR',serif;outline:none;width:100%;padding:2px 0;transition:border-color .2s;}
+.pnm-inp:focus{border-bottom-color:var(--bl);}
+@media(min-width:768px){.pnm-inp{font-size:24px;}}
+
+.pbd{padding:18px 18px 40px;}
+@media(min-width:768px){.pbd{padding:22px 32px 48px;}}
+
+/* ── PANEL PHOTO ── */
+.pp-wrap{margin-bottom:20px;position:relative;cursor:pointer;}
+.pp-area{width:100%;aspect-ratio:16/7;background:var(--off2);overflow:hidden;display:flex;align-items:center;justify-content:center;border:2px dashed var(--stx);transition:border-color .2s;}
+.pp-area:hover{border-color:var(--bl);}
+.pp-area img{width:100%;height:100%;object-fit:cover;}
+.pp-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--stl);}
+.pp-ph svg{opacity:.4;}
+.pp-ph span{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;}
+.pp-del{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);border:none;color:var(--wh);font-size:10px;padding:5px 10px;font-family:'Space Mono',monospace;cursor:pointer;display:none;}
+.pp-wrap:hover .pp-del{display:block;}
+
+/* ── CALC ── */
+.calc{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--off);border:1px solid var(--stx);padding:13px 15px;margin-bottom:22px;}
+.clbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--st);white-space:nowrap;}
+.qw{display:flex;align-items:stretch;border:1px solid var(--stl);background:var(--wh);overflow:hidden;}
+.qb{width:40px;height:42px;background:none;border:none;font-family:'Space Mono',monospace;font-size:18px;color:var(--st);transition:background .12s,color .12s;}
+.qb:active,.qb:hover{background:var(--bl);color:var(--wh);}
+.qi{width:64px;border:none;text-align:center;font-family:'Space Mono',monospace;font-size:17px;font-weight:700;color:var(--bk);outline:none;border-left:1px solid var(--stx);border-right:1px solid var(--stx);}
+.cst{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--bl);background:var(--blbg);padding:5px 11px;white-space:nowrap;}
+.ctot{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--grn);background:rgba(46,125,82,.08);padding:5px 11px;white-space:nowrap;display:none;}
+.ctot.on{display:block;}
+
+/* ── SECTION / TABLE ── */
+.sblk{margin-bottom:24px;}
+.shd{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--st);padding-bottom:7px;border-bottom:1px solid var(--lnm);}
+.sbdg{margin-left:auto;background:var(--bl);color:var(--wh);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 8px;}
+.itbl{width:100%;border-collapse:collapse;font-size:12px;}
+.itbl th{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--stl);text-align:left;padding:7px 6px;border-bottom:1px solid var(--ln);}
+.itbl th:not(:first-child){text-align:right;}
+.itbl td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:middle;}
+.itbl td:not(:first-child){text-align:right;font-family:'Space Mono',monospace;font-size:10px;}
+.itbl tr:hover td{background:var(--off);}
+.itbl tr.tot td{font-family:'Space Mono',monospace;font-weight:700;font-size:11px;border-top:1.5px solid var(--lnm);border-bottom:none;padding-top:10px;background:transparent!important;}
+.en{border:none;background:transparent;font-size:12px;color:var(--bk);width:100%;outline:none;padding:2px 3px;transition:background .12s,box-shadow .12s;}
+.en:focus{background:var(--off2);box-shadow:0 0 0 1.5px var(--bl);}
+.enum{border:none;background:transparent;font-family:'Space Mono',monospace;font-size:10px;color:var(--bk);text-align:right;width:52px;outline:none;padding:2px 3px;transition:background .12s,box-shadow .12s;}
+.enum:focus{background:var(--off2);box-shadow:0 0 0 1.5px var(--bl);}
+.cv{font-weight:700!important;color:var(--bl)!important;}
+.cc{color:var(--grn)!important;font-size:9px!important;}
+.rbc{display:flex;align-items:center;gap:4px;justify-content:flex-end;}
+.rbar{width:28px;height:3px;background:var(--stx);border-radius:2px;overflow:hidden;}
+.rfill{height:100%;background:var(--bl);transition:width .3s;}
+.rnum{font-size:9px;color:var(--st);width:30px;text-align:right;}
+.dr{background:none;border:none;color:var(--stl);font-size:12px;padding:3px 4px;transition:color .13s;}
+.dr:hover,.dr:active{color:var(--red);}
+.addr{display:flex;align-items:center;gap:6px;width:100%;padding:9px 6px;margin-top:5px;background:none;border:1px dashed var(--stx);font-size:12px;color:var(--st);transition:all .15s;}
+.addr:hover,.addr:active{border-color:var(--bl);color:var(--bl);background:var(--blbg);}
+
+/* ── PROCESS / NOTES ── */
+.procw{margin-top:20px;padding-top:20px;border-top:1px solid var(--ln);}
+.ptit{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--st);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.svd{font-size:9px;color:var(--bl);opacity:0;transition:opacity .3s;}
+.svd.show{opacity:1;}
+.sl{list-style:none;counter-reset:sc;}
+.sli{counter-increment:sc;display:flex;gap:10px;margin-bottom:9px;align-items:flex-start;}
+.sli::before{content:counter(sc,decimal-leading-zero);font-family:'Space Mono',monospace;font-size:10px;color:var(--bl);font-weight:700;flex-shrink:0;margin-top:9px;}
+.sta{flex:1;border:1px solid var(--stx);background:var(--off);padding:9px 11px;font-size:13px;color:var(--bk);resize:none;outline:none;line-height:1.55;transition:border-color .15s;}
+.sta:focus{border-color:var(--bl);}
+.sdel{background:none;border:none;color:var(--stl);font-size:13px;padding:5px;flex-shrink:0;margin-top:7px;}
+.sdel:hover,.sdel:active{color:var(--red);}
+.adds{display:flex;align-items:center;gap:6px;padding:9px 6px;margin-top:4px;background:none;border:1px dashed var(--stx);font-size:12px;color:var(--st);transition:all .15s;}
+.adds:hover,.adds:active{border-color:var(--bl);color:var(--bl);background:var(--blbg);}
+.notew{margin-top:18px;padding-top:18px;border-top:1px solid var(--ln);}
+.noteta{width:100%;padding:11px 12px;border:1px solid var(--stx);background:var(--off);font-size:13px;color:var(--bk);min-height:76px;resize:vertical;outline:none;line-height:1.6;transition:border-color .15s;}
+.noteta:focus{border-color:var(--bl);}
+
+/* ── MODAL ── */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.mov.open{display:flex;}
+.modal{background:var(--wh);width:100%;max-width:420px;padding:26px 26px 22px;}
+.modal-title{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;margin-bottom:18px;}
+.mf{margin-bottom:13px;}
+.mf label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--st);margin-bottom:5px;display:block;}
+.mi{width:100%;border:1px solid var(--stx);padding:11px 13px;font-size:14px;color:var(--bk);outline:none;transition:border-color .2s;background:var(--wh);}
+.mi:focus{border-color:var(--bl);}
+.ms-el{width:100%;border:1px solid var(--stx);padding:11px 13px;font-size:14px;color:var(--bk);outline:none;background:var(--wh);cursor:pointer;}
+.macts{display:flex;gap:8px;margin-top:18px;}
+.mbtn{flex:1;padding:13px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:background .15s;}
+.mbtn.cn{background:var(--off);color:var(--st);}
+.mbtn.cn:hover{background:var(--stx);}
+.mbtn.ok{background:var(--bl);color:var(--wh);}
+.mbtn.ok:hover{background:var(--bld);}
+.mbtn.rm{background:var(--red);color:var(--wh);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bk);color:var(--wh);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;padding:12px 20px;z-index:900;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── PRINT ── */
+@media print{
+  #LS,header,.ntc,.ctabs,.sidebar,#ov,.panel,.toast,.mov{display:none!important;}
+  .main{padding:0!important;}
+  .rg{border:none!important;}
+  .rc{break-inside:avoid;page-break-inside:avoid;}
+  .rc-photo-btn{display:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="LS">
+  <img class="ll-logo" id="ll-logo" alt="MOMOS">
+  <div class="ll-sub">Recipe &amp; Formula Manager</div>
+  <div class="lf">
+    <input id="lpw" type="password" placeholder="PASSWORD" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')login()">
+    <button class="lf-btn" onclick="login()">Enter</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app" style="display:none">
+  <div class="ntc" id="ntc">
+    MOMOS BAKERY — 레시피 &amp; 배합 관리 &nbsp;·&nbsp; 직원 전용
+    <button class="ntcx" onclick="this.parentElement.remove()">✕</button>
+  </div>
+
+  <header>
+    <div class="hdr">
+      <img class="hdr-logo" id="hdr-logo" alt="MOMOS">
+      <div class="hsr">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="si1" placeholder="레시피 검색…" oninput="srch(this.value)">
+      </div>
+      <div class="hdr-btns">
+        <span id="fb-badge" style="display:none;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--grn);padding:7px 8px;border:1px solid rgba(46,125,82,.3);white-space:nowrap;">☁ SYNC</span>
+        <button class="hbtn" onclick="window.print()">🖨 <span class="txt">인쇄</span></button>
+        <button class="hbtn pri" onclick="openNewRecipe()">＋ <span class="txt">새 레시피</span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ms">
+    <div class="msi">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C5C1BB" stroke-width="1.8">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="si2" placeholder="레시피 검색…" oninput="srch(this.value)">
+    </div>
+  </div>
+
+  <nav class="ctabs" id="ctabs"></nav>
+
+  <div class="app-body">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+      <div class="mhd">
+        <div class="mt" id="mtit">전체 레시피</div>
+        <div class="mm" id="mmeta"></div>
+      </div>
+      <div class="rg" id="rg"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ PANEL ══ -->
+<div class="ov" id="ov" onclick="if(event.target===this)closePanel()"></div>
+<div class="panel" id="panel">
+  <div class="dh"><div class="dhb"></div></div>
+  <div class="phd">
+    <div class="phd-acts">
+      <button class="pact" onclick="copyRecipe()">복사</button>
+      <button class="pact" onclick="window.print()">인쇄</button>
+      <button class="pact red" onclick="confirmDeleteRecipe()">삭제</button>
+      <button class="pcl" onclick="closePanel()">✕</button>
+    </div>
+    <div class="pct" id="pct"></div>
+    <div id="pnm-wrap"></div>
+  </div>
+  <div class="pbd" id="pbd"></div>
+</div>
+
+<!-- ══ MODALS ══ -->
+<!-- New Recipe -->
+<div class="mov" id="mNewRecipe">
+  <div class="modal">
+    <div class="modal-title">새 레시피 추가</div>
+    <div class="mf"><label>레시피 이름</label><input class="mi" id="nr-name" placeholder="예: 말차 마들렌"></div>
+    <div class="mf"><label>카테고리</label><select class="ms-el" id="nr-cat"></select></div>
+    <div class="macts">
+      <button class="mbtn cn" onclick="closeModal('mNewRecipe')">취소</button>
+      <button class="mbtn ok" onclick="createRecipe()">추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Recipe -->
+<div class="mov" id="mDelRecipe">
+  <div class="modal">
+    <div class="modal-title">레시피 삭제</div>
+    <p id="del-msg" style="font-size:14px;color:var(--st);line-height:1.6;margin-bottom:4px"></p>
+    <div class="macts">
+      <button class="mbtn cn" onclick="closeModal('mDelRecipe')">취소</button>
+      <button class="mbtn rm" onclick="doDeleteRecipe()">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Category -->
+<div class="mov" id="mEditCat">
+  <div class="modal">
+    <div class="modal-title">카테고리 수정</div>
+    <div class="mf"><label>카테고리 이름</label><input class="mi" id="ec-name"></div>
+    <div class="macts">
+      <button class="mbtn cn" onclick="closeModal('mEditCat')">취소</button>
+      <button class="mbtn rm" style="flex:.6" onclick="doDeleteCat()">삭제</button>
+      <button class="mbtn ok" onclick="doEditCat()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category -->
+<div class="mov" id="mAddCat">
+  <div class="modal">
+    <div class="modal-title">카테고리 추가</div>
+    <div class="mf"><label>이름</label><input class="mi" id="ac-name" placeholder="예: 음료"></div>
+    <div class="macts">
+      <button class="mbtn cn" onclick="closeModal('mAddCat')">취소</button>
+      <button class="mbtn ok" onclick="doAddCat()">추가</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══ DATA + LOGIC ══ -->
+<!-- Firebase SDK (compat v9) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="logo_b64.js"></script>
+<script src="photos_data.js"></script>
+<script src="recipes_data.js"></script>
+<script>
+/* ─────────────────────────────────
+   CONFIG
+───────────────────────────────── */
+const PW = 'momos2024';
+
+/* ─────────────────────────────────
+   FIREBASE CONFIG
+   ▶ Firebase Console에서 복사한 값을 아래에 붙여넣으세요
+   https://console.firebase.google.com
+───────────────────────────────── */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyC15-eHWOwrwv4Rpvz2FMWRDsMP0r4ZDIo",
+  authDomain:        "momos-recipe.firebaseapp.com",
+  databaseURL:       "https://momos-recipe-default-rtdb.firebaseio.com",
+  projectId:         "momos-recipe",
+  storageBucket:     "momos-recipe.firebasestorage.app",
+  messagingSenderId: "454357646140",
+  appId:             "1:454357646140:web:61f3cb2e76ffee73657c39"
+};
+
+// Firebase가 설정되었는지 확인 (placeholder 값이면 비활성)
+const FB_READY = !FIREBASE_CONFIG.apiKey.includes('여기에');
+
+let fbDb      = null;  // Firebase Database 인스턴스
+let fbRef     = null;  // 루트 참조 (/momos)
+let fbStorage = null;  // Firebase Storage 인스턴스
+let fbListenerOn = false;
+
+if (FB_READY) {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbDb      = firebase.database();
+    fbRef     = fbDb.ref('momos');
+    fbStorage = firebase.storage();
+  } catch(e) {
+    console.warn('Firebase 초기화 실패:', e.message);
+  }
+}
+
+// 로그인 화면 로고를 페이지 로드 즉시 표시
+document.getElementById('ll-logo').src = LOGO_WHITE;
+
+/* ─────────────────────────────────
+   STORAGE HELPERS
+───────────────────────────────── */
+// Firebase에 쓰지 않을 키
+// Storage 미설정 시 base64 사진은 Realtime DB 용량 초과 → 제외
+// Storage 설정 완료 시 URL로 교체되므로 포함 (init 후 동적 결정)
+const FB_SKIP = new Set(['mm_ph','mm_cp']);
+
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sv(k,v){
+  // 로컬 저장
+  try{localStorage.setItem(k,JSON.stringify(v));}catch{toast('저장 공간 부족');}
+  // Firebase 동기화 (사진 키 제외)
+  if(fbRef && !FB_SKIP.has(k)){
+    fbRef.child(k).set(v).catch(e=>console.warn('Firebase 쓰기 실패:',e.message));
+  }
+}
+function sid(n){return n.replace(/[^가-힣a-zA-Z0-9]/g,'_');}
+function ex(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+
+/* ─────────────────────────────────
+   STATE
+───────────────────────────────── */
+// 번들 사진을 기본값으로, 로컬 업로드(사용자 변경)가 있으면 우선 적용
+const _defaultPhotos = (typeof PHOTOS_DATA !== 'undefined') ? PHOTOS_DATA : {};
+const S = {
+  cat: '전체',
+  q: '',
+  recipes:    ld('mm_r', null),
+  cats:       ld('mm_c', null),
+  procs:      ld('mm_p', {}),
+  notes:      ld('mm_n', {}),
+  favs:       ld('mm_f', {}),
+  photos:     Object.assign({}, _defaultPhotos, ld('mm_ph',{})),   // panel photos
+  cphotos:    Object.assign({}, _defaultPhotos, ld('mm_cp',{})),   // card photos
+  // per-recipe ingredient overrides: {recipeName: {secIdx_ingIdx: {name,per_one,ratio,_del}}}
+  overrides:  ld('mm_ov',{}),
+  // per-recipe extra ingredients: {recipeName: {secIdx: [{name,per_one,ratio}]}}
+  extras:     ld('mm_ex',{}),
+  _panel: null,
+  _delName: null,
+  _editCatOld: null,
+};
+
+// First run: seed from bundled data
+if (!S.recipes) { S.recipes = JSON.parse(JSON.stringify(RECIPES_DATA)); sv('mm_r', S.recipes); }
+if (!S.cats)    { S.cats = ['전체','제과','제빵','디저트','샌드위치','기타']; sv('mm_c', S.cats); }
+
+/* ─────────────────────────────────
+   UI HELPERS
+───────────────────────────────── */
+function toast(msg, dur=2200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'), dur);
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+/* ─────────────────────────────────
+   LOGIN
+───────────────────────────────── */
+function login(){
+  if(document.getElementById('lpw').value === PW){
+    const s=document.getElementById('LS');
+    s.classList.add('out');
+    setTimeout(()=>{
+      s.style.display='none';
+      document.getElementById('app').style.display='block';
+      init();
+    }, 400);
+  } else {
+    document.getElementById('lerr').textContent='비밀번호가 틀렸습니다';
+    document.getElementById('lpw').value='';
+    setTimeout(()=>document.getElementById('lerr').textContent='', 2400);
+  }
+}
+
+/* ─────────────────────────────────
+   FIREBASE SYNC HELPERS
+───────────────────────────────── */
+// Firebase에서 전체 데이터를 가져와 State + localStorage 갱신
+function applyFbSnapshot(snap){
+  if(!snap.exists()) return false;
+  const d = snap.val();
+  // Storage 활성 시 사진 URL도 포함
+  const map = {
+    mm_r:'recipes', mm_c:'cats', mm_p:'procs',
+    mm_n:'notes',   mm_f:'favs', mm_ov:'overrides',
+    mm_ex:'extras', mm_ph:'photos', mm_cp:'cphotos'
+  };
+  let changed = false;
+  Object.entries(map).forEach(([k,sk])=>{
+    if(d[k] !== undefined){
+      S[sk] = d[k];
+      try{localStorage.setItem(k, JSON.stringify(d[k]));}catch{}
+      changed = true;
+    }
+  });
+  return changed;
+}
+
+// Firebase 실시간 리스너 등록 (로그인 후 1회만)
+function startFbListener(){
+  if(!fbRef || fbListenerOn) return;
+  fbListenerOn = true;
+  fbRef.on('value', snap=>{
+    if(applyFbSnapshot(snap)){
+      buildNav();
+      renderGrid();
+      if(S._panel){ const pn=S._panel; openPanel(pn); }
+    }
+  }, e=>console.warn('Firebase 읽기 실패:',e.message));
+}
+
+/* ─────────────────────────────────
+   PHOTO UPLOAD (Firebase Storage)
+───────────────────────────────── */
+// 사진 파일을 업로드하고 URL(또는 base64) 반환
+async function uploadPhoto(name, file){
+  if(!fbStorage){
+    // Storage 미설정 → base64 로컬 저장
+    return new Promise(resolve=>{
+      const r=new FileReader();
+      r.onload=ev=>resolve(ev.target.result);
+      r.readAsDataURL(file);
+    });
+  }
+  // Firebase Storage에 업로드
+  toast('📤 사진 업로드 중…');
+  const safeKey = name.replace(/[^가-힣a-zA-Z0-9]/g, '_');
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const storRef = fbStorage.ref(`photos/${safeKey}.${ext}`);
+  await storRef.put(file);
+  const url = await storRef.getDownloadURL();
+  return url;
+}
+
+// Storage 활성 시 사진 URL을 Realtime DB에 동기화
+// Realtime DB 키로 레시피 이름을 직접 사용 (Firebase 금지 문자만 _로 치환)
+function fbSafeKey(name){ return name.replace(/[.#$[\]/]/g,'_'); }
+function savePhoUrl(name, url){
+  if(!fbRef) return;
+  const k = fbSafeKey(name);
+  fbRef.child('mm_ph').child(k).set(url).catch(e=>console.warn('사진 URL 저장 실패:',e.message));
+  fbRef.child('mm_cp').child(k).set(url).catch(e=>console.warn('사진 URL 저장 실패:',e.message));
+}
+
+/* ─────────────────────────────────
+   INIT
+───────────────────────────────── */
+async function init(){
+  document.getElementById('ll-logo').src  = LOGO_WHITE;
+  document.getElementById('hdr-logo').src = LOGO_BLACK;
+
+  // Firebase Storage 활성 시 사진 키도 Realtime DB 동기화 허용
+  if(fbStorage){
+    FB_SKIP.delete('mm_ph');
+    FB_SKIP.delete('mm_cp');
+  }
+
+  // Firebase가 활성화된 경우 클라우드 데이터 우선 로드
+  if(fbRef){
+    try{
+      const snap = await fbRef.once('value');
+      if(snap.exists()){
+        applyFbSnapshot(snap);
+      } else {
+        // 클라우드가 비어있으면 현재 로컬 데이터를 시드
+        const seed = {
+          mm_r: S.recipes,  mm_c: S.cats,
+          mm_p: S.procs,    mm_n: S.notes,
+          mm_f: S.favs,     mm_ov: S.overrides,
+          mm_ex: S.extras
+        };
+        await fbRef.set(seed);
+        toast('☁️ Firebase에 데이터를 처음 저장했습니다');
+      }
+      startFbListener();
+      const badge = document.getElementById('fb-badge');
+      if(badge) badge.style.display = '';
+      toast('☁️ 클라우드 연결됨');
+    } catch(e){
+      console.warn('Firebase 로드 실패, 로컬 데이터 사용:', e.message);
+      toast('⚠️ 클라우드 연결 실패 — 로컬 저장 모드');
+    }
+  }
+
+  buildNav();
+  renderGrid();
+}
+
+/* ─────────────────────────────────
+   NAV
+───────────────────────────────── */
+function catCount(c){
+  if(c==='전체') return Object.keys(S.recipes).length;
+  return Object.values(S.recipes).filter(r=>r.category===c).length;
+}
+
+function buildNav(){
+  // tabs
+  document.getElementById('ctabs').innerHTML =
+    S.cats.map(c=>`
+      <button class="ctab${c===S.cat?' on':''}" onclick="setCat('${ex(c)}')"
+        ondblclick="openEditCat('${ex(c)}')" title="더블클릭: 수정">${c}</button>
+    `).join('') +
+    `<button class="ctab-add" onclick="openModal('mAddCat')" title="카테고리 추가">＋</button>`;
+
+  // sidebar
+  document.getElementById('sidebar').innerHTML =
+    `<span class="slbl">카테고리</span>` +
+    S.cats.map(c=>`
+      <button class="sbtn${c===S.cat?' on':''}" onclick="setCat('${ex(c)}')">
+        ${c}<span class="scnt">${catCount(c)}</span>
+      </button>`).join('');
+}
+
+function setCat(c){ S.cat=c; S.q=''; ['si1','si2'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';}); buildNav(); renderGrid(); }
+function srch(q){ S.q=q.trim(); renderGrid(); }
+
+/* ─────────────────────────────────
+   CATEGORY CRUD
+───────────────────────────────── */
+function openEditCat(name){
+  if(name==='전체') return;
+  S._editCatOld=name;
+  document.getElementById('ec-name').value=name;
+  openModal('mEditCat');
+}
+function doEditCat(){
+  const nw=document.getElementById('ec-name').value.trim();
+  if(!nw){toast('이름을 입력해주세요');return;}
+  const old=S._editCatOld;
+  if(nw!==old){
+    const i=S.cats.indexOf(old); if(i>-1) S.cats[i]=nw;
+    Object.values(S.recipes).forEach(r=>{ if(r.category===old) r.category=nw; });
+    if(S.cat===old) S.cat=nw;
+    sv('mm_c',S.cats); sv('mm_r',S.recipes);
+  }
+  closeModal('mEditCat'); buildNav(); renderGrid(); toast('카테고리 수정됨');
+}
+function doDeleteCat(){
+  const old=S._editCatOld;
+  if(old==='전체'){closeModal('mEditCat');return;}
+  S.cats=S.cats.filter(c=>c!==old);
+  Object.values(S.recipes).forEach(r=>{ if(r.category===old) r.category='기타'; });
+  if(S.cat===old) S.cat='전체';
+  sv('mm_c',S.cats); sv('mm_r',S.recipes);
+  closeModal('mEditCat'); buildNav(); renderGrid(); toast('카테고리 삭제됨');
+}
+function doAddCat(){
+  const nm=document.getElementById('ac-name').value.trim();
+  if(!nm){toast('이름을 입력해주세요');return;}
+  if(S.cats.includes(nm)){toast('이미 있는 카테고리입니다');return;}
+  S.cats.push(nm); sv('mm_c',S.cats);
+  document.getElementById('ac-name').value='';
+  closeModal('mAddCat'); buildNav(); renderGrid(); toast(`'${nm}' 추가됨`);
+}
+
+/* ─────────────────────────────────
+   RECIPE CRUD
+───────────────────────────────── */
+function openNewRecipe(){
+  const sel=document.getElementById('nr-cat');
+  sel.innerHTML=S.cats.filter(c=>c!=='전체').map(c=>`<option value="${c}">${c}</option>`).join('');
+  if(S.cat!=='전체') sel.value=S.cat;
+  document.getElementById('nr-name').value='';
+  openModal('mNewRecipe');
+  setTimeout(()=>document.getElementById('nr-name').focus(), 120);
+}
+function createRecipe(){
+  const name=document.getElementById('nr-name').value.trim();
+  const cat=document.getElementById('nr-cat').value;
+  if(!name){toast('레시피 이름을 입력해주세요');return;}
+  if(S.recipes[name]){toast('같은 이름이 이미 있습니다');return;}
+  S.recipes[name]={category:cat,sections:[{section:'반죽',base_count:1,ingredients:[{name:'재료명',per_one:0,ratio:0}]}]};
+  sv('mm_r',S.recipes);
+  closeModal('mNewRecipe'); buildNav(); renderGrid();
+  toast(`'${name}' 추가됨`);
+  setTimeout(()=>openPanel(name), 300);
+}
+function confirmDeleteRecipe(){
+  const name=S._panel; if(!name) return;
+  S._delName=name;
+  document.getElementById('del-msg').textContent=`'${name}' 레시피를 삭제할까요? 되돌릴 수 없습니다.`;
+  openModal('mDelRecipe');
+}
+function doDeleteRecipe(){
+  const name=S._delName; if(!name) return;
+  delete S.recipes[name];
+  sv('mm_r',S.recipes);
+  closeModal('mDelRecipe'); closePanel(); buildNav(); renderGrid();
+  toast(`'${name}' 삭제됨`);
+}
+function copyRecipe(){
+  const name=S._panel; if(!name) return;
+  let nw=name+' (복사)', i=2;
+  while(S.recipes[nw]) nw=name+` (복사${i++})`;
+  S.recipes[nw]=JSON.parse(JSON.stringify(S.recipes[name]));
+  sv('mm_r',S.recipes); buildNav(); renderGrid();
+  toast(`'${nw}'으로 복사됨`);
+  setTimeout(()=>openPanel(nw), 350);
+}
+function renameRecipe(oldName, newName){
+  newName=newName.trim();
+  if(!newName||newName===oldName) return;
+  if(S.recipes[newName]){toast('같은 이름이 이미 있습니다'); document.getElementById('pnm-wrap').querySelector('input').value=oldName; return;}
+  S.recipes[newName]=S.recipes[oldName];
+  delete S.recipes[oldName];
+  // migrate
+  ['mm_p','mm_n','mm_f','mm_ph','mm_cp','mm_ov','mm_ex'].forEach(k=>{
+    const obj=ld(k,{});
+    if(obj[oldName]!==undefined){obj[newName]=obj[oldName];delete obj[oldName];sv(k,obj);}
+  });
+  S.procs=ld('mm_p',{}); S.notes=ld('mm_n',{}); S.favs=ld('mm_f',{});
+  S.photos=ld('mm_ph',{}); S.cphotos=ld('mm_cp',{});
+  S.overrides=ld('mm_ov',{}); S.extras=ld('mm_ex',{});
+  sv('mm_r',S.recipes);
+  S._panel=newName;
+  buildNav(); renderGrid();
+  toast(`이름 변경됨`);
+}
+
+/* ─────────────────────────────────
+   FAVORITES
+───────────────────────────────── */
+function toggleFav(name,e){
+  e.stopPropagation();
+  S.favs[name]=!S.favs[name];
+  sv('mm_f',S.favs); renderGrid();
+}
+
+/* ─────────────────────────────────
+   CARD PHOTO
+───────────────────────────────── */
+function openCardPhoto(name,e){
+  e.stopPropagation();
+  document.getElementById('cph_'+sid(name)).click();
+}
+async function onCardPhoto(name,inp){
+  const f=inp.files[0]; if(!f) return;
+  try{
+    const url = await uploadPhoto(name, f);
+    S.cphotos[name] = url;
+    S.photos[name]  = url;
+    sv('mm_cp', S.cphotos);
+    sv('mm_ph', S.photos);
+    if(fbStorage) savePhoUrl(name, url);
+    renderGrid();
+    toast('✅ 사진 저장됨');
+  }catch(e){ toast('❌ 사진 업로드 실패'); console.error(e); }
+}
+
+/* ─────────────────────────────────
+   GRID
+───────────────────────────────── */
+function filtered(){
+  return Object.entries(S.recipes).filter(([n,d])=>{
+    const catOk=S.cat==='전체'||d.category===S.cat;
+    const qOk=!S.q||n.includes(S.q);
+    return catOk&&qOk;
+  }).sort((a,b)=>{
+    // favs first
+    const fa=S.favs[a[0]]?1:0, fb=S.favs[b[0]]?1:0;
+    return fb-fa||a[0].localeCompare(b[0],'ko');
+  });
+}
+
+function renderGrid(){
+  const list=filtered();
+  document.getElementById('mtit').textContent=S.cat==='전체'?'전체 레시피':S.cat;
+  document.getElementById('mmeta').innerHTML=`<b>${list.length}</b>개 레시피 · Momos Bakery`;
+  if(!list.length){
+    document.getElementById('rg').innerHTML=`<div class="empty-s"><div class="ei">🥐</div><p class="et">레시피가 없습니다</p></div>`;
+    return;
+  }
+  document.getElementById('rg').innerHTML=list.map(([n,d])=>{
+    const tot=getEffectiveIngs(n).reduce((s,sec)=>s+sec.length,0);
+    const hasP=S.procs[n]?.length>0;
+    const isFav=!!S.favs[n];
+    const photo=S.cphotos[n]||S.photos[n];
+    return `<div class="rc" onclick="openPanel('${ex(n)}')">
+      <div class="rc-photo">
+        ${photo?`<img src="${photo}" alt="${n}" loading="lazy">`:`<div class="rc-ph-ph">🥐</div>`}
+        <button class="rc-photo-btn" onclick="openCardPhoto('${ex(n)}',event)">사진 변경</button>
+        <input type="file" accept="image/*" style="display:none" id="cph_${sid(n)}"
+          onchange="onCardPhoto('${ex(n)}',this)" onclick="event.stopPropagation()">
+      </div>
+      <div class="rc-info">
+        <div class="rc-top">
+          <div class="rc-cat">${d.category}</div>
+          <button class="rc-fav${isFav?' on':''}" onclick="toggleFav('${ex(n)}',event)" title="즐겨찾기">${isFav?'★':'☆'}</button>
+        </div>
+        <div class="rc-name">${n}</div>
+        <div class="rc-tags">
+          <span class="rt">${tot}가지</span>
+          ${hasP?'<span class="rt b">공정✓</span>':''}
+          ${isFav?'<span class="rt y">★ 즐겨찾기</span>':''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ─────────────────────────────────
+   EFFECTIVE INGREDIENTS
+   (base + extras, skip deleted)
+───────────────────────────────── */
+function getEffectiveIngs(name){
+  const d=S.recipes[name]; if(!d) return [];
+  const ov=S.overrides[name]||{};
+  const ex2=S.extras[name]||{};
+  return (d.sections||[]).map((sec,si)=>{
+    const base=(sec.ingredients||[])
+      .map((ing,ii)=>{
+        const o=ov[`${si}_${ii}`]||{};
+        if(o._del) return null;
+        return {
+          name:     o.name!==undefined    ? o.name    : ing.name,
+          per_one:  o.per_one!==undefined ? o.per_one : ing.per_one,
+          ratio:    o.ratio!==undefined   ? o.ratio   : ing.ratio,
+          _key:`${si}_${ii}`,_si:si,_ii:ii,_isExtra:false
+        };
+      }).filter(Boolean);
+    const extras=(ex2[si]||[]).map((ing,xi)=>({
+      ...ing, _key:`${si}_x${xi}`,_si:si,_xi:xi,_isExtra:true
+    }));
+    return [...base,...extras];
+  });
+}
+
+/* ─────────────────────────────────
+   PANEL
+───────────────────────────────── */
+function openPanel(name){
+  const d=S.recipes[name]; if(!d) return;
+  S._panel=name;
+  document.getElementById('pct').textContent=d.category;
+  document.getElementById('pnm-wrap').innerHTML=
+    `<input class="pnm-inp" value="${name.replace(/"/g,'&quot;')}"
+      onchange="renameRecipe('${ex(name)}',this.value)"
+      onclick="this.select()">`;
+  document.getElementById('pbd').innerHTML=buildBody(name,d);
+  document.getElementById('ov').classList.add('open');
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('panel').scrollTop=0;
+  document.body.style.overflow='hidden';
+  updateCalc(name);
+}
+function closePanel(){
+  document.getElementById('ov').classList.remove('open');
+  document.getElementById('panel').classList.remove('open');
+  document.body.style.overflow='';
+  S._panel=null;
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
+
+/* ─────────────────────────────────
+   PANEL BODY
+───────────────────────────────── */
+function buildBody(name, d){
+  const id=sid(name);
+  const procs=S.procs[name]||[];
+  const notes=S.notes[name]||'';
+  const photo=S.photos[name];
+
+  let h = `
+  <div class="pp-wrap">
+    <div class="pp-area" onclick="document.getElementById('pph_${id}').click()">
+      ${photo
+        ? `<img src="${photo}" alt="${name}">`
+        : `<div class="pp-ph">
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+               <rect x="3" y="3" width="18" height="18" rx="2"/>
+               <circle cx="8.5" cy="8.5" r="1.5"/>
+               <polyline points="21 15 16 10 5 21"/>
+             </svg>
+             <span>사진 추가</span>
+           </div>`
+      }
+    </div>
+    ${photo?`<button class="pp-del" onclick="delPanelPhoto('${ex(name)}')">✕ 사진 삭제</button>`:''}
+    <input type="file" accept="image/*" style="display:none" id="pph_${id}"
+      onchange="onPanelPhoto('${ex(name)}',this)">
+  </div>
+
+  <div class="calc">
+    <span class="clbl">수량</span>
+    <div class="qw">
+      <button class="qb" onclick="chQ('${ex(name)}',-1)">−</button>
+      <input class="qi" id="qty_${id}" type="number" value="1" min="1" max="9999"
+        oninput="updateCalc('${ex(name)}')">
+      <button class="qb" onclick="chQ('${ex(name)}',1)">＋</button>
+    </div>
+    <div class="cst" id="cs_${id}">1개 기준</div>
+    <div class="ctot" id="ct_${id}"></div>
+  </div>`;
+
+  // sections
+  const effSections=getEffectiveIngs(name);
+  (d.sections||[]).forEach((sec,si)=>{
+    const lbl=sec.section||(si===0?'반죽':`파트 ${si+1}`);
+    const ings=effSections[si]||[];
+    const maxR=ings.reduce((m,x)=>Math.max(m,x.ratio||0),0)||100;
+
+    const rows=ings.map(ing=>{
+      const {name:cn,per_one:cp,ratio:cr,_key,_si,_isExtra,_xi} = ing;
+      const delCall = _isExtra
+        ? `delExtra('${ex(name)}',${_si},${_xi})`
+        : `delBase('${ex(name)}','${_key.replace('_','__')}')`;
+      // For onchange, we need si and either ii or xi
+      const nameChange = _isExtra
+        ? `eExtra('${ex(name)}',${_si},${_xi},'name',this.value)`
+        : `eBase('${ex(name)}','${_key.replace('_','__')}','name',this.value)`;
+      const numChange = _isExtra
+        ? `eExtra('${ex(name)}',${_si},${_xi},'per_one',parseFloat(this.value)||0);updateCalc('${ex(name)}')`
+        : `eBase('${ex(name)}','${_key.replace('_','__')}','per_one',parseFloat(this.value)||0);updateCalc('${ex(name)}')`;
+      const cvId=`cv_${id}_${_key.replace(/[^a-zA-Z0-9가-힣]/g,'_')}`;
+      const ccId=`cc_${id}_${_key.replace(/[^a-zA-Z0-9가-힣]/g,'_')}`;
+      return `<tr>
+        <td><input class="en" value="${cn.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onchange="${nameChange}"></td>
+        <td><input class="enum" value="${cp}" type="number" step="0.001" min="0"
+          onchange="${numChange}" oninput="${numChange}"></td>
+        <td class="cv" id="${cvId}">—</td>
+        <td class="cc" id="${ccId}">—</td>
+        <td><div class="rbc">
+          <div class="rbar"><div class="rfill" style="width:${Math.min(100,(cr/maxR)*100).toFixed(1)}%"></div></div>
+          <span class="rnum">${cr.toFixed(1)}%</span>
+        </div></td>
+        <td><button class="dr" onclick="${delCall}" title="삭제">✕</button></td>
+      </tr>`;
+    }).join('');
+
+    h+=`<div class="sblk">
+      <div class="shd">${lbl}<span class="sbdg">기준 ${sec.base_count||1}개</span></div>
+      <table class="itbl">
+        <thead><tr><th>재료명</th><th>1개(g)</th><th>계산량</th><th>원가</th><th>비율</th><th></th></tr></thead>
+        <tbody id="tb_${id}_${si}">${rows}</tbody>
+        <tfoot><tr class="tot">
+          <td>총중량</td>
+          <td id="t1_${id}_${si}">—</td>
+          <td id="tc_${id}_${si}">—</td>
+          <td id="tcc_${id}_${si}" style="color:var(--grn)">—</td>
+          <td></td><td></td>
+        </tr></tfoot>
+      </table>
+      <button class="addr" onclick="addExtra('${ex(name)}',${si})">＋ 재료 추가</button>
+    </div>`;
+  });
+
+  // process
+  h+=`<div class="procw">
+    <div class="ptit">공정 순서 <span class="svd" id="sl_${id}">저장됨 ✓</span></div>
+    <ol class="sl" id="steps_${id}">
+      ${procs.map((s,i)=>`
+        <li class="sli">
+          <textarea class="sta" rows="1"
+            oninput="aH(this);sProc('${ex(name)}')"
+            onchange="sProc('${ex(name)}')"
+          >${s}</textarea>
+          <button class="sdel" onclick="dStep('${ex(name)}',${i})">✕</button>
+        </li>`).join('')}
+    </ol>
+    <button class="adds" onclick="addStep('${ex(name)}')">＋ 단계 추가</button>
+  </div>
+  <div class="notew">
+    <div class="ptit">메모</div>
+    <textarea class="noteta" id="nt_${id}"
+      placeholder="특이사항, 주의점, 팁…"
+      onchange="sNotes('${ex(name)}')">${notes}</textarea>
+  </div>`;
+
+  return h;
+}
+
+/* ─────────────────────────────────
+   PANEL PHOTO
+───────────────────────────────── */
+async function onPanelPhoto(name,inp){
+  const f=inp.files[0]; if(!f) return;
+  try{
+    const url = await uploadPhoto(name, f);
+    S.photos[name]  = url;
+    S.cphotos[name] = url;
+    sv('mm_ph', S.photos);
+    sv('mm_cp', S.cphotos);
+    if(fbStorage) savePhoUrl(name, url);
+    const d=S.recipes[name]; if(!d) return;
+    const sc=document.getElementById('panel').scrollTop;
+    document.getElementById('pbd').innerHTML=buildBody(name,d);
+    document.getElementById('panel').scrollTop=sc;
+    updateCalc(name); renderGrid();
+    toast('✅ 사진 저장됨');
+  }catch(e){ toast('❌ 사진 업로드 실패'); console.error(e); }
+}
+async function delPanelPhoto(name){
+  // Firebase Storage에서도 삭제
+  if(fbStorage){
+    try{
+      const safeKey = name.replace(/[^가-힣a-zA-Z0-9]/g,'_');
+      const k = fbSafeKey(name);
+      // 확장자 모름 → 여러 형식 시도
+      for(const ext of ['jpg','jpeg','png','webp']){
+        try{ await fbStorage.ref(`photos/${safeKey}.${ext}`).delete(); break; }catch{}
+      }
+      // Realtime DB URL 제거
+      if(fbRef){
+        await fbRef.child('mm_ph').child(k).remove().catch(()=>{});
+        await fbRef.child('mm_cp').child(k).remove().catch(()=>{});
+      }
+    }catch(e){ console.warn('Storage 삭제 실패:', e.message); }
+  }
+  delete S.photos[name];  sv('mm_ph', S.photos);
+  delete S.cphotos[name]; sv('mm_cp', S.cphotos);
+  const d=S.recipes[name]; if(!d) return;
+  const sc=document.getElementById('panel').scrollTop;
+  document.getElementById('pbd').innerHTML=buildBody(name,d);
+  document.getElementById('panel').scrollTop=sc;
+  updateCalc(name); renderGrid();
+}
+
+/* ─────────────────────────────────
+   CALCULATOR + COST
+───────────────────────────────── */
+function chQ(name,delta){
+  const e=document.getElementById('qty_'+sid(name)); if(!e) return;
+  e.value=Math.max(1,(parseInt(e.value)||1)+delta);
+  updateCalc(name);
+}
+
+function matchCost(ingName){
+  const clean=ingName.replace(/\s/g,'').toLowerCase();
+  let best=null, bestLen=0;
+  for(const [k,v] of Object.entries(ING_COSTS)){
+    const kc=k.replace(/\s/g,'').toLowerCase();
+    // try substring match
+    const short=kc.replace(/[^가-힣a-z]/g,'').substring(0,6);
+    const shortN=clean.replace(/[^가-힣a-z]/g,'').substring(0,6);
+    if(short&&shortN&&(clean.includes(short)||short.includes(shortN))){
+      if(short.length>bestLen){ bestLen=short.length; best=v; }
+    }
+  }
+  return best;
+}
+
+function updateCalc(name){
+  const id=sid(name), d=S.recipes[name]; if(!d) return;
+  const qty=parseInt(document.getElementById('qty_'+id)?.value)||1;
+  const effSecs=getEffectiveIngs(name);
+  let grandCost=0, hasCost=false;
+
+  (d.sections||[]).forEach((sec,si)=>{
+    const ings=effSecs[si]||[];
+    let t1=0,tc=0,tcc=0;
+    ings.forEach(ing=>{
+      const {name:cn,per_one:po,_key}=ing;
+      const cv=po*qty; t1+=po; tc+=cv;
+      const cvEl=document.getElementById(`cv_${id}_${_key.replace(/[^a-zA-Z0-9가-힣]/g,'_')}`);
+      if(cvEl) cvEl.textContent=cv.toFixed(1)+'g';
+      const cpg=matchCost(cn);
+      const ccEl=document.getElementById(`cc_${id}_${_key.replace(/[^a-zA-Z0-9가-힣]/g,'_')}`);
+      if(cpg!==null&&cpg!==undefined){
+        const cost=cpg*cv; tcc+=cost; grandCost+=cost; hasCost=true;
+        if(ccEl) ccEl.textContent='₩'+Math.round(cost).toLocaleString();
+      } else {
+        if(ccEl) ccEl.textContent='—';
+      }
+    });
+    const e1=document.getElementById(`t1_${id}_${si}`);
+    const ec=document.getElementById(`tc_${id}_${si}`);
+    const ecc=document.getElementById(`tcc_${id}_${si}`);
+    if(e1) e1.textContent=t1.toFixed(1)+'g';
+    if(ec) ec.textContent=tc.toFixed(1)+'g';
+    if(ecc) ecc.textContent=tcc>0?'₩'+Math.round(tcc).toLocaleString():'—';
+  });
+
+  const st=document.getElementById('cs_'+id);
+  if(st) st.textContent=qty===1?'1개 기준':`${qty}개 기준`;
+  const ct=document.getElementById('ct_'+id);
+  if(ct){
+    if(hasCost){ ct.textContent='재료비 ≈ ₩'+Math.round(grandCost).toLocaleString(); ct.classList.add('on'); }
+    else ct.classList.remove('on');
+  }
+}
+
+/* ─────────────────────────────────
+   INGREDIENT EDIT — BASE (original)
+   key format: "si__ii"
+───────────────────────────────── */
+function parseKey(k){ const p=k.split('__'); return {si:parseInt(p[0]),ii:parseInt(p[1])}; }
+
+function eBase(name,key,field,val){
+  const {si,ii}=parseKey(key);
+  if(!S.overrides[name]) S.overrides[name]={};
+  const k=`${si}_${ii}`;
+  if(!S.overrides[name][k]) S.overrides[name][k]={};
+  S.overrides[name][k][field]=val;
+  sv('mm_ov',S.overrides);
+}
+function delBase(name,key){
+  const {si,ii}=parseKey(key);
+  if(!S.overrides[name]) S.overrides[name]={};
+  const k=`${si}_${ii}`;
+  if(!S.overrides[name][k]) S.overrides[name][k]={};
+  S.overrides[name][k]._del=true;
+  sv('mm_ov',S.overrides);
+  rerender(name);
+}
+
+/* ─────────────────────────────────
+   INGREDIENT EDIT — EXTRA (added)
+───────────────────────────────── */
+function eExtra(name,si,xi,field,val){
+  if(!S.extras[name]) S.extras[name]={};
+  if(!S.extras[name][si]) S.extras[name][si]=[];
+  if(S.extras[name][si][xi]) S.extras[name][si][xi][field]=val;
+  sv('mm_ex',S.extras);
+}
+function delExtra(name,si,xi){
+  if(S.extras[name]?.[si]) S.extras[name][si].splice(xi,1);
+  sv('mm_ex',S.extras);
+  rerender(name);
+}
+function addExtra(name,si){
+  if(!S.extras[name]) S.extras[name]={};
+  if(!S.extras[name][si]) S.extras[name][si]=[];
+  S.extras[name][si].push({name:'새 재료',per_one:0,ratio:0});
+  sv('mm_ex',S.extras);
+  rerender(name);
+  // focus new row
+  setTimeout(()=>{
+    const rows=document.querySelectorAll(`#tb_${sid(name)}_${si} tr`);
+    const last=rows[rows.length-1];
+    if(last) last.querySelector('.en')?.focus();
+  },80);
+}
+
+function rerender(name){
+  const d=S.recipes[name]; if(!d) return;
+  const sc=document.getElementById('panel').scrollTop;
+  document.getElementById('pbd').innerHTML=buildBody(name,d);
+  document.getElementById('panel').scrollTop=sc;
+  updateCalc(name);
+}
+
+/* ─────────────────────────────────
+   PROCESS
+───────────────────────────────── */
+function gSteps(name){
+  const e=document.getElementById('steps_'+sid(name));
+  if(!e) return [];
+  return [...e.querySelectorAll('.sta')].map(t=>t.value);
+}
+function sProc(name){
+  S.procs[name]=gSteps(name); sv('mm_p',S.procs);
+  const e=document.getElementById('sl_'+sid(name));
+  if(e){ e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),2000); }
+  renderGrid();
+}
+function addStep(name){
+  S.procs[name]=gSteps(name); S.procs[name].push(''); sv('mm_p',S.procs);
+  rerender(name);
+  setTimeout(()=>{ const last=[...document.querySelectorAll('.sta')].at(-1); if(last){last.focus();aH(last);} },80);
+}
+function dStep(name,i){
+  S.procs[name]=gSteps(name); S.procs[name].splice(i,1); sv('mm_p',S.procs);
+  rerender(name);
+}
+function aH(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+/* ─────────────────────────────────
+   NOTES
+───────────────────────────────── */
+function sNotes(name){
+  const e=document.getElementById('nt_'+sid(name)); if(!e) return;
+  S.notes[name]=e.value; sv('mm_n',S.notes);
+}
+</script>
+</body>
+</html>
