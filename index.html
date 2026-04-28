@@ -159,6 +159,7 @@ header{border-bottom:1px solid var(--lnm);background:var(--wh);position:sticky;t
 .pcl{float:right;background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;font-family:'Space Mono',monospace;margin-top:-2px;padding:4px;transition:color .15s;margin-left:8px;}
 .pcl:hover{color:var(--bl);}
 .pct{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bl);margin-bottom:5px;margin-top:8px;}
+.pct-sel{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bl);background:transparent;border:none;border-bottom:1px solid var(--bl);outline:none;cursor:pointer;padding:0 14px 0 0;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%230B76BE'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;}
 .pnm-inp{background:none;border:none;border-bottom:1px solid rgba(255,255,255,.15);color:var(--wh);font-size:20px;font-weight:600;font-family:'Noto Serif KR',serif;outline:none;width:100%;padding:2px 0;transition:border-color .2s;}
 .pnm-inp:focus{border-bottom-color:var(--bl);}
 @media(min-width:768px){.pnm-inp{font-size:24px;}}
@@ -751,6 +752,14 @@ function copyRecipe(){
   toast(`'${nw}'으로 복사됨`);
   setTimeout(()=>openPanel(nw), 350);
 }
+function changeRecipeCat(name, newCat){
+  if(!S.recipes[name] || S.recipes[name].category === newCat) return;
+  S.recipes[name].category = newCat;
+  sv('mm_r', S.recipes);
+  buildNav(); renderGrid();
+  toast('카테고리 변경됨 → ' + newCat);
+}
+
 function renameRecipe(oldName, newName){
   newName=newName.trim();
   if(!newName||newName===oldName) return;
@@ -885,7 +894,10 @@ function getEffectiveIngs(name){
 function openPanel(name){
   const d=S.recipes[name]; if(!d) return;
   S._panel=name;
-  document.getElementById('pct').textContent=d.category;
+  document.getElementById('pct').innerHTML=
+    `<select class="pct-sel" onchange="changeRecipeCat('${ex(name)}',this.value)">
+      ${S.cats.filter(c=>c!=='전체').map(c=>`<option value="${c}"${c===d.category?' selected':''}>${c}</option>`).join('')}
+    </select>`;
   document.getElementById('pnm-wrap').innerHTML=
     `<input class="pnm-inp" value="${name.replace(/"/g,'&quot;')}"
       onchange="renameRecipe('${ex(name)}',this.value)"
