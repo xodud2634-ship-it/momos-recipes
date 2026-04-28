@@ -1079,18 +1079,24 @@ function chQ(name,delta){
 }
 
 function matchCost(ingName){
-  const clean=ingName.replace(/\s/g,'').toLowerCase();
-  let best=null, bestLen=0;
-  for(const [k,v] of Object.entries(ING_COSTS)){
-    const kc=k.replace(/\s/g,'').toLowerCase();
-    // try substring match
-    const short=kc.replace(/[^가-힣a-z]/g,'').substring(0,6);
-    const shortN=clean.replace(/[^가-힣a-z]/g,'').substring(0,6);
-    if(short&&shortN&&(clean.includes(short)||short.includes(shortN))){
-      if(short.length>bestLen){ bestLen=short.length; best=v; }
-    }
+  // 1순위: 정확한 이름으로 바로 찾기 (엑셀에서 추출한 전체 이름 포함)
+  if(ING_COSTS[ingName] !== undefined) return ING_COSTS[ingName];
+
+  // 2순위: "(반죽) 버터" → 접두어 제거 후 핵심 재료명으로 매칭
+  const core = ingName.replace(/^\([^)]+\)\s*/, '').trim();
+  const coreCl = core.replace(/\s/g,'').toLowerCase().replace(/[^가-힣a-z0-9]/g,'');
+  if(!coreCl || coreCl.length < 2) return null;
+
+  let best = null, bestScore = 0;
+  for(const [k, v] of Object.entries(ING_COSTS)){
+    const kc = k.replace(/\s/g,'').toLowerCase().replace(/[^가-힣a-z0-9]/g,'');
+    let score = 0;
+    if(kc === coreCl)                                   score = 200;
+    else if(kc.includes(coreCl) && coreCl.length >= 2) score = coreCl.length * 3;
+    else if(coreCl.includes(kc) && kc.length >= 2)     score = kc.length;
+    if(score > bestScore){ bestScore = score; best = v; }
   }
-  return best;
+  return bestScore > 0 ? best : null;
 }
 
 function updateCalc(name){
