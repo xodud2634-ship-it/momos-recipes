@@ -834,8 +834,9 @@ async function onCardPhoto(name,inp){
 ───────────────────────────────── */
 function filtered(){
   return Object.entries(S.recipes).filter(([n,d])=>{
-    const catOk=S.cat==='전체'||d.category===S.cat;
-    const qOk=!S.q||n.includes(S.q);
+    const qOk=!S.q||n.includes(S.q)||n.replace(/\s/g,'').includes(S.q.replace(/\s/g,''));
+    // 검색어 있으면 카테고리 무시하고 전체 검색
+    const catOk=S.q?true:(S.cat==='전체'||d.category===S.cat);
     return catOk&&qOk;
   }).sort((a,b)=>{
     // 종료 제품은 항상 하단
@@ -849,7 +850,7 @@ function filtered(){
 
 function renderGrid(){
   const list=filtered();
-  document.getElementById('mtit').textContent=S.cat==='전체'?'전체 레시피':S.cat;
+  document.getElementById('mtit').textContent=S.q?`"${S.q}" 검색 결과`:(S.cat==='전체'?'전체 레시피':S.cat);
   document.getElementById('mmeta').innerHTML=`<b>${list.length}</b>개 레시피 · Momos Bakery`;
   if(!list.length){
     document.getElementById('rg').innerHTML=`<div class="empty-s"><div class="ei">🥐</div><p class="et">레시피가 없습니다</p></div>`;
