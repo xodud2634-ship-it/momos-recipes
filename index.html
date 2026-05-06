@@ -503,6 +503,8 @@ const S = {
   overrides:  ld('mm_ov',{}),
   // per-recipe extra ingredients: {recipeName: {secIdx: [{name,per_one,ratio}]}}
   extras:     ld('mm_ex',{}),
+  // 카테고리 별도 저장 (mm_r 덮어쓰기로 초기화되는 것 방지)
+  rcats:      ld('mm_rc',{}),
   _panel: null,
   _delName: null,
   _editCatOld: null,
@@ -556,7 +558,8 @@ function applyFbSnapshot(snap){
   const map = {
     mm_r:'recipes', mm_c:'cats', mm_p:'procs',
     mm_n:'notes',   mm_f:'favs', mm_ov:'overrides',
-    mm_ex:'extras', mm_ph:'photos', mm_cp:'cphotos'
+    mm_ex:'extras', mm_ph:'photos', mm_cp:'cphotos',
+    mm_rc:'rcats'
   };
   let changed = false;
   Object.entries(map).forEach(([k,sk])=>{
@@ -566,6 +569,12 @@ function applyFbSnapshot(snap){
       changed = true;
     }
   });
+  // Firebase 동기화 후 카테고리 덮어씌워지는 것 방지: mm_rc를 항상 재적용
+  if(S.rcats && S.recipes){
+    Object.entries(S.rcats).forEach(([n,cat])=>{
+      if(S.recipes[n]) S.recipes[n].category = cat;
+    });
+  }
   return changed;
 }
 
@@ -774,7 +783,9 @@ function copyRecipe(){
 function changeRecipeCat(name, newCat){
   if(!S.recipes[name] || S.recipes[name].category === newCat) return;
   S.recipes[name].category = newCat;
+  S.rcats[name] = newCat;  // 카테고리를 별도 저장소에 독립 보존
   sv('mm_r', S.recipes);
+  sv('mm_rc', S.rcats);
   buildNav(); renderGrid();
   toast('카테고리 변경됨 → ' + newCat);
 }
