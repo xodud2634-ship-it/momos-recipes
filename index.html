@@ -510,11 +510,12 @@ const S = {
   _editCatOld: null,
 };
 
-// First run: seed from bundled data
-if (!S.recipes) { S.recipes = JSON.parse(JSON.stringify(RECIPES_DATA)); sv('mm_r', S.recipes); }
-if (!S.cats)    { S.cats = ['전체','제과','제빵','디저트','샌드위치','기타','종료']; sv('mm_c', S.cats); }
-// 기존 데이터에 종료 탭이 없으면 추가
-if (S.cats && !S.cats.includes('종료')) { S.cats.push('종료'); sv('mm_c', S.cats); }
+// First run: seed from bundled data (로컬만 저장, Firebase는 init()에서 처리)
+function _lsv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+if (!S.recipes) { S.recipes = JSON.parse(JSON.stringify(RECIPES_DATA)); _lsv('mm_r', S.recipes); }
+if (!S.cats)    { S.cats = ['전체','제과','제빵','디저트','샌드위치','기타','종료']; _lsv('mm_c', S.cats); }
+// 기존 데이터에 종료 탭이 없으면 추가 (로컬만)
+if (S.cats && !S.cats.includes('종료')) { S.cats.push('종료'); _lsv('mm_c', S.cats); }
 
 /* ─────────────────────────────────
    UI HELPERS
